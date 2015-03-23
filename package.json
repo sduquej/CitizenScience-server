@@ -1,0 +1,16 @@
+{
+  "name": "simpleFormApp",
+  "version": "0.1.0",
+  "description": "A simple form application to be accessed from a mobile client application created on Ionic",
+  "main": "server.js",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "author": "Sebastián Duque",
+  "license": "MIT",
+  "dependencies": {
+    "mongojs": "^0.18.1",
+    "morgan": "^1.5.1",
+    "restify": "^2.8.5"
+  }
+}
