@@ -1,7 +1,7 @@
 {
-  "name": "simpleFormApp",
-  "version": "0.1.0",
-  "description": "A simple form application to be accessed from a mobile client application created on Ionic",
+  "name": "contribution-rest-server",
+  "version": "0.5.0",
+  "description": "A simple rest server with persistance in mongodb",
   "main": "server.js",
   "engines": {
     "node": "0.10.x"

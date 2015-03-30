@@ -4,24 +4,33 @@
 'use strict';
 // Dependencies
 // File and Operating Systems modules
-var fs = require('fs');
-var os = require('os');
+var fs = require('fs'),
+  os = require('os'),
 // Restify enables us to build correct REST web services
-var restify = require('restify');
+  restify = require('restify'),
 // Provides an adapter to the offical mongo api
-var mongojs = require('mongojs');
+  mongojs = require('mongojs'),
 // Request logger middleware
-var morgan = require('morgan');
+  morgan = require('morgan'),
 // Configuration options
-var config = require('./config');
+  config = require('./config'),
+  dbcfg = config.db;
+
+// Check that the DB authentication variables are properly set up
+if (!(dbcfg.user && dbcfg.password)){
+  console.error('Environment variables for DB authentication are not properly set.')
+  process.exit(1);
+}
+
+// Mongo connection string URI
+// http://docs.mongodb.org/v2.6/reference/connection-string/
+var connectionString = 'mongodb://' + dbcfg.user + ':' + dbcfg.password + '@'
+      + dbcfg.host1 + ':' + dbcfg.port1 + '/' + dbcfg.database;
 
 // Create a database object using the mongojs adapter
-var db = mongojs('simpleFormApp', ['appUsers']);
-
+var db = mongojs(connectionString, [dbcfg.collection]),
 // REST server
-var server = restify.createServer({
-  "name": "REST Server"
-});
+  server = restify.createServer();
 
 // Request Handling options
 // http://mcavage.me/node-restify/#bundled-plugins
@@ -48,4 +57,4 @@ server.listen(config.port, function() {
     console.log('Server started @ ',config.port);    
 });
 
-var manageUsers = require('./manageUser')(server, db, fs, config);
+var contributionsEndpoint = require('./contributionsEndpoint')(server, db, fs, config);
