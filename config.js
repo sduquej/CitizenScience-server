@@ -1,6 +1,15 @@
 'use strict';
 var config = {};
 
+// database authentication
+config.db = {
+  user = process.env.CSDB_USER,
+  password = process.env.CSDB_PASSWORD,
+  host1 = ds039211.mongolab.com,
+  port1 = 39211,
+  database = citizenscience_mu
+};
+
 config.file_upload = {};
 
 // Port on which the server will be listening
