@@ -4,7 +4,7 @@
  'use strict';
  module.exports = function (server, db, fs, config){
   // DB collection that will be used
-  var collection = db.config.collection;
+  var collection =  config.db.collection;
   // REST endpoint for list of contributions, offloads to the client the 
   // computing of the statistics.
   server.get('/api/v1/contributions/list', function (req, res, next){
@@ -22,14 +22,13 @@
   server.post('/api/v1/contributions/register', function (req, res, next){
     var userContribution = req.params;
     var file = req.files.file;      
-
     // If a file was uploaded get it to the configured upload directory
     if (file){
       // Store the metadata about the uploaded file
       userContribution.files = JSON.parse(userContribution.files);
       
       fs.readFile(file.path, function(err, data){
-        if (err){          
+        if (err){
           res.writeHead(400, {
             'Content-Type': 'application/json; charset=utf-8'
           });
@@ -49,12 +48,15 @@
              message: 'Unexpected error when writing file'
             }));            
           }
-          util.log('File uploaded @ ' + filename);
+          console.log('File uploaded @ ' + filename);
         });        
         return next();
         });
     }   
-    
+    // Include the IP address for data audit purposes
+    userContribution._ip_address_ = req.headers['x-forwarded-for'] || 
+                                      req.connection.remoteAddress;
+
     // Write on the db
     db[collection].insert(userContribution, function (err, dbObject){
      if (err){                      
