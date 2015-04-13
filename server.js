@@ -29,6 +29,8 @@ var connectionString = 'mongodb://' + dbcfg.user + ':' + dbcfg.password + '@'
 
 // Create a database object using the mongojs adapter
 var db = mongojs(connectionString, [dbcfg.collection]),
+// Use a local db, for development
+// var db = mongojs('simpleFormApp', ['contributionsq']),
 // REST server
   server = restify.createServer();
 
